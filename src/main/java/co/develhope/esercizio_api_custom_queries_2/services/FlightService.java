@@ -20,11 +20,12 @@ public class FlightService {
     @Autowired
     private FlightRepository flightRepository;
 
-    public void insertFlights () {
+    public List<Flight> insertFlights () {
         List<Flight> flightsToPost = generateRandomFlightList();
         for (Flight flight : flightsToPost) {
             flightRepository.save(flight);
         }
+        return flightsToPost;
     }
 
     public List<Flight> findAllFlights () {
