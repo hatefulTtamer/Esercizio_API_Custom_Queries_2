@@ -20,7 +20,7 @@ public class FlightService {
     @Autowired
     private FlightRepository flightRepository;
 
-    public List<Flight> insertFlights () {
+    public List<Flight> insertFlights() {
         List<Flight> flightsToPost = generateRandomFlightList();
         for (Flight flight : flightsToPost) {
             flightRepository.save(flight);
@@ -28,21 +28,29 @@ public class FlightService {
         return flightsToPost;
     }
 
-    public List<Flight> findAllFlights () {
-        return flightRepository.findAll();
+    public List<Flight> findNFlights(int n) {
+        List<Flight> totalFlights = flightRepository.findAll();
+        List<Flight> resultList = new ArrayList<>();
+        for (Flight flight : totalFlights) {
+            if (resultList.size() >= n) {
+                break;
+            }
+            resultList.add(flight);
+        }
+        return resultList;
     }
 
-    public Page<Flight> findFlightsSortByFromAirport (int pageNumber, int pageSize) {
+    public Page<Flight> findFlightsSortByFromAirport(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("fromAirport").ascending());
         return flightRepository.findAll(pageable);
     }
 
-    public List<Flight> findByOnTimeFlights () {
+    public List<Flight> findByOnTimeFlights() {
         return flightRepository.findByFlightStatus(FlightStatus.ON_TIME);
     }
 
-    public List<Flight> findByP1orP2Flights (FlightStatus p1, FlightStatus p2) {
-        return flightRepository.findByFlightStatus(p1, p2);
+    public List<Flight> findByP1orP2Flights(FlightStatus p1, FlightStatus p2) {
+        return flightRepository.findFlightsByFlightStatus(p1, p2);
     }
 
     public String generateRandomString() {
@@ -56,25 +64,15 @@ public class FlightService {
         return resultString.toString();
     }
 
-    public FlightStatus generateRandomFlightStatus () {
+    public FlightStatus generateRandomFlightStatus() {
         Random random = new Random();
         FlightStatus[] statuses = FlightStatus.values();
         return statuses[random.nextInt(statuses.length)];
     }
 
-    public List<Flight> generateRandomFlightList (int n) {
+    public List<Flight> generateRandomFlightList() {
         List<Flight> flights = new ArrayList<>();
-        for (int i = 1; i<=n; i++) {
-            Flight flight = new Flight(i, generateRandomString(), generateRandomString(),
-                    generateRandomString(), generateRandomFlightStatus());
-            flights.add(flight);
-        }
-        return flights;
-    }
-
-    public List<Flight> generateRandomFlightList () {
-        List<Flight> flights = new ArrayList<>();
-        for (int i = 1; i<=100; i++) {
+        for (int i = 1; i <= 100; i++) {
             Flight flight = new Flight(i, generateRandomString(), generateRandomString(),
                     generateRandomString(), generateRandomFlightStatus());
             flights.add(flight);

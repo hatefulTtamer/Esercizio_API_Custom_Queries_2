@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,11 @@ public class FlightController {
     @PostMapping
     public ResponseEntity<List<Flight>> insertMany () {
         return ResponseEntity.ok().body(flightService.insertFlights());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Flight>> findMany (@RequestParam int n) {
+        return ResponseEntity.ok().body(flightService.findNFlights(n));
     }
 
     @GetMapping("/sorting")
