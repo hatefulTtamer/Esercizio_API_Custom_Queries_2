@@ -23,7 +23,7 @@ public class FlightController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Flight>> findMany (@RequestParam int n) {
+    public ResponseEntity<List<Flight>> findMany (@RequestParam(required = false, defaultValue = "100") int n) {
         return ResponseEntity.ok().body(flightService.findNFlights(n));
     }
 
